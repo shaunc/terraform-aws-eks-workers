@@ -94,3 +94,23 @@ variable "cpu_utilization_low_threshold_percent" {
   type        = number
   description = "The value against which the specified statistic is compared"
 }
+
+variable mixed_instances_policy {
+  description = "policy to used mixed group of on demand/spot of differing types. Launch template is automatically generated. https://www.terraform.io/docs/providers/aws/r/autoscaling_group.html#mixed_instances_policy-1"
+
+  type = object({
+    instances_distribution = object({
+      on_demand_allocation_strategy = string
+      on_demand_base_capacity = number
+      on_demand_percentage_above_base_capacity = number
+      spot_allocation_strategy = string
+      spot_instance_pools = number
+      spot_max_price = string
+    })
+    override = list(object({
+      instance_type = string
+      weighted_capacity = number
+    }))
+  })
+  default = null
+}

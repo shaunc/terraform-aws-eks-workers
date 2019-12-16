@@ -167,9 +167,8 @@ data "aws_iam_instance_profile" "default" {
   count = var.enabled && var.use_existing_aws_iam_instance_profile ? 1 : 0
   name  = var.aws_iam_instance_profile_name
 }
-
 module "autoscale_group" {
-  source = "git::https://github.com/cloudposse/terraform-aws-ec2-autoscale-group.git?ref=tags/0.2.0"
+  source = "git::https://github.com/shaunc/terraform-aws-ec2-autoscale-group.git?ref=mixed-instance-policy"
 
   enabled    = var.enabled
   namespace  = var.namespace
@@ -204,7 +203,17 @@ module "autoscale_group" {
   ebs_optimized                           = var.ebs_optimized
   elastic_gpu_specifications              = var.elastic_gpu_specifications
   instance_initiated_shutdown_behavior    = var.instance_initiated_shutdown_behavior
-  instance_market_options                 = var.instance_market_options
+  instance_market_options                 = {
+    market_type = null
+    spot_options = {
+      block_duration_minutes = null
+      instance_interruption_behavior = null
+      max_price = null
+      spot_instance_type = null
+      valid_until = null
+    }
+  }
+  mixed_instances_policy                  = var.mixed_instances_policy
   key_name                                = var.key_name
   placement                               = var.placement
   enable_monitoring                       = var.enable_monitoring

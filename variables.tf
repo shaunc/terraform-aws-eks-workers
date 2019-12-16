@@ -458,7 +458,7 @@ variable "instance_market_options" {
   type = object({
     market_type = string
     spot_options = object({
-      block_duration_minutes         = bool
+      block_duratiocn_minutes         = bool
       instance_interruption_behavior = string
       max_price                      = number
       spot_instance_type             = string
@@ -466,6 +466,26 @@ variable "instance_market_options" {
     })
   })
 
+  default = null
+}
+
+variable mixed_instances_policy {
+  description = "policy to used mixed group of on demand/spot of differing types. Launch template is automatically generated. https://www.terraform.io/docs/providers/aws/r/autoscaling_group.html#mixed_instances_policy-1"
+
+  type = object({
+    instances_distribution = object({
+      on_demand_allocation_strategy = string
+      on_demand_base_capacity = number
+      on_demand_percentage_above_base_capacity = number
+      spot_allocation_strategy = string
+      spot_instance_pools = number
+      spot_max_price = string
+    })
+    override = list(object({
+      instance_type = string
+      weighted_capacity = number
+    }))
+  })
   default = null
 }
 

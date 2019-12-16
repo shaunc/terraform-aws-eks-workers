@@ -19,7 +19,7 @@ module "vpc" {
 }
 
 module "subnets" {
-  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.16.0"
+  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.18.1"
   availability_zones   = var.availability_zones
   namespace            = var.namespace
   stage                = var.stage
@@ -50,6 +50,7 @@ module "eks_workers" {
   cluster_security_group_id              = var.cluster_security_group_id
   cluster_security_group_ingress_enabled = var.cluster_security_group_ingress_enabled
   bootstrap_extra_args                   = "--node-labels=purpose=ci-worker"
+  mixed_instances_policy                  = var.mixed_instances_policy
 
   # Auto-scaling policies and CloudWatch metric alarms
   autoscaling_policies_enabled           = var.autoscaling_policies_enabled
